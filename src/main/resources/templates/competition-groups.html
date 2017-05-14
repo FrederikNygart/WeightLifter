@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layouts/main">
+<head>
+    <title>Weightlifting Management System</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <div th:if="${!competition.isCompetitionComplete()}">
+        <form th:action="'/competition/' + ${competition.id} + '/dashboard'" method="get">
+            <button type="submit" class="btn btn-success">Start Competition</button>
+        </form>
+    </div>
+
+    <div th:each="g : ${competingGroups}">
+        <div th:include="fragments/competing-groups-fragment :: competing-groups"
+             th:with="group=${g}"
+        />
+    </div>
+</div>
+</body>
+</html>

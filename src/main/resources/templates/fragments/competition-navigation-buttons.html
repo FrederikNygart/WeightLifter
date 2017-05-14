@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>Nav Buttons</title>
+</head>
+<body>
+<div th:fragment="competition-navigation-buttons">
+    <a class="btn btn-default" th:href="@{/competition/{id}/participants(id=${competition.id})}" role="button">View Participants</a>
+    <a th:class="'btn btn-default' + (${competition.isSignUpOpen()}? '' : ' disabled')" th:href="@{/competition/{id}/sign-up(id=${competition.id})}" role="button">Sign-Up</a>
+    <a th:class="'btn btn-default' + (${competition.isWeighInStarted()}? '' : ' disabled')" th:href="@{/competition/{id}/weigh-in(id=${competition.id})}" role="button">Weigh-In</a>
+    <a th:class="'btn btn-default' + (${competition.isCompetitionStarted()}? '' : ' disabled')" th:href="@{/competition/{id}/dashboard(id=${competition.id})}" role="button">Dashboard</a>
+    <a th:class="'btn btn-default' + (${competition.isWeighInComplete()}? '' : ' disabled')" th:href="@{/competition/{id}/competing-groups(id=${competition.id})}" role="button">View Groups</a>
+    <a th:class="'btn btn-default' + (${competition.isCompetitionComplete()}? '' : ' disabled')" th:href="@{/competition/{id}/results(id=${competition.id})}" role="button">View Results</a>
+</div>
+
+</body>
+</html>

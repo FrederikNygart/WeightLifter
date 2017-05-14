@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Participant info</title>
+</head>
+<body>
+    <div th:fragment="participant-info" th:object="${participant}">
+        <div class="row">
+            <div class="col-xs-1">
+
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <th class="left-header">
+                    <span class="label label-primary"
+                     th:text="${participant.rank}"
+                    />
+                    <span th:text="${participant.forename} + ' ' +
+                          ${#strings.toUpperCase(participant.surname)} +
+                          ' (' + ${participant.genderInitial} + ')'"
+                    />
+                </th>
+                <th></th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Body Weight:</td>
+                <td th:text="${participant.bodyWeight} + 'kg'"></td>
+            </tr>
+            <tr>
+                <td>Date of Birth:</td>
+                <td th:text="${participant.dateOfBirthString}"></td>
+            </tr>
+            <tr>
+                <td>Club:</td>
+                <td th:text="${participant.clubName}"></td>
+            </tr>
+            <tr>
+                <td>Total Score:</td>
+                <td th:text="${participant.totalScore}"></td>
+            </tr>
+            <tr>
+                <td>Sinclair Total:</td>
+                <td th:text="${#numbers.formatDecimal(participant.sinclairScore, 1, 1)}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

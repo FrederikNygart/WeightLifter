@@ -1,0 +1,127 @@
+body {
+  font-family: 'Droid Sans', sans-serif;
+}
+
+th.center-heading {
+  text-align: center;
+}
+
+td.pass-lift {
+    color: green;
+}
+
+td.fail-lift {
+    color: red;
+    text-decoration: line-through;
+}
+
+td.abstain-lift {
+}
+
+td.best-lift {
+    font-weight: bold;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+th.right-header {
+    text-align: right;
+}
+
+th.left-header {
+  text-align: left;
+}
+
+ul.past-results {
+  list-style: none;
+  padding-left: 0;
+}
+
+.fail {
+  text-decoration: line-through;
+}
+
+.pass {
+  font-weight: bold;
+}
+
+.upcoming-lifters {
+  margin-top: 40px;
+  background: yellow;
+  border: 1px solid;
+  padding: 10px;
+}
+
+.current-lifter-info,
+.edit-lifter-info {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+}
+
+.btn-pass,
+.btn-fail {
+  width: 150px;
+}
+
+ul.comp-progress {
+  margin-top: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+li.steps {
+  width: 16%;
+  display: inline-block;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+li.pass {
+  background: #5cb85c;
+  border-color: #4cae4c;
+  color: white;
+}
+
+li.fail {
+  background: #d9534f;
+  border-color: #d43f3a;
+  color: white;
+  text-decoration: none;
+}
+
+li.current {
+  background-color: #ec971f;
+  border-color: #d58512;
+  color: white;
+}
+
+td.current-edit {
+  background: white;
+  border: 1px solid #ddd;
+}
+
+table.table-competition {
+  margin-top: 40px;
+}
+
+.label a {
+    color: white;
+}
+
+/*****************************************
+CARD STYLING
+*****************************************/
+div .card{
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding-top: 10px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+
+/*****************************************
+CHECKBOX STYLING
+*****************************************/

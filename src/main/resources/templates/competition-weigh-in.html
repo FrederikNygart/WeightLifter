@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layouts/main">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Weigh in</title>
+</head>
+<body>
+    <div layout:fragment="content">
+
+        <div>
+            <p class="bg-danger" id="error-message" th:text="${msg}"></p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5">
+                <form class="table-form" action="javascript:void(0);">
+                    <table class="table table-front">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Club</th>
+                            <th>Weight</th>
+                            <th>Snatch</th>
+                            <th>Clean&amp;Jerk</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="p : ${participants}" th:if="${p.notWeighedIn}">
+                            <td th:text="${p.fullName}"></td>
+                            <td th:text="${p.clubName}"></td>
+                            <td>
+                                <input th:id="'body-weight-' + ${p.id}"
+                                       class="form-control"
+                                       type="text"
+                                       th:name="'body-weight-' + ${p.id}"
+                                       th:value="${p.bodyWeight}"
+                                       maxlength="5"
+                                       size="5"
+                                />
+                            </td>
+                            <td>
+                                <input th:id="'starting-snatch-weight-' + ${p.id}"
+                                       class="form-control"
+                                       type="text"
+                                       th:name="'starting-snatch-weight-' + ${p.id}"
+                                       maxlength="4"
+                                       size="4"
+                                />
+                            </td>
+                            <td>
+                                <input th:id="'starting-clean-and-jerk-weight-' + ${p.id}"
+                                       class="form-control"
+                                       type="text"
+                                       th:name="'starting-clean-and-jerk-weight-' + ${p.id}"
+                                       maxlength="4"
+                                       size="4"
+                                />
+                            </td>
+                            <td>
+                                <input class="checkbox participant-checkbox-empty"
+                                       th:id="'participant-checkbox-' + ${p.id}"
+                                       type="checkbox"
+                                       name="participantUnchecked"
+                                />
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="col-md-2"/>
+            <div class="col-md-5">
+                <form class="table-form" action="">
+                    <table class="table table-front">
+                        <thead>
+                        <tr>
+                            <th>Start no.</th>
+                            <th>Name</th>
+                            <th>Club</th>
+                            <th>Weight</th>
+                            <th>Snatch</th>
+                            <th>Clean&amp;Jerk</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="p : ${participants}" th:if="${p.weighedIn}">
+                            <td th:text="${p.startNumber}"></td>
+                            <td th:text="${p.fullName}"></td>
+                            <td th:text="${p.clubName}"></td>
+                            <td th:text="${p.bodyWeight}"></td>
+                            <td th:text="${p.startingSnatchWeight}"></td>
+                            <td th:text="${p.startingCleanAndJerkWeight}"></td>
+                            <td>
+                                <div class="checkbox">
+                                <input type="checkbox"
+                                       class="checkbox participant-checkbox-checked"
+                                       th:id="'participant-checkbox-' + ${p.id}"
+                                       name="participantChecked"
+                                       th:checked="${p.weighedIn}"
+                                />
+                                    <label th:for="'participant-checkbox-' + ${p.id}" ></label>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <form th:action="'/competition/' + ${competition.id} + '/competing-groups'" method="post">
+            <button type="submit" class="btn btn-success">Register Participants</button>
+        </form>
+        <script>
+            $(document).ready(function () {
+                $(".participant-checkbox-empty").prop('checked', false);
+                $(".participant-checkbox-checked").prop('checked', true);
+                var currentURL = window.location.href;
+
+                /**
+                 * Checks if checkbox is checked or unchecked. Directs post request to either check-in or check-out endpoint
+                 * @param id
+                 * @returns {*}
+                 */
+                function isChecked(id) {
+                    if ($("#participant-checkbox-" + id).is(":checked")) {
+                        return currentURL + "/check-in"
+                    }
+                    return currentURL + "/check-out"
+                }
+
+
+                $(".checkbox").on("click", function (event) {
+                    var pathElems = event.target.id.split("-");
+                    var id = pathElems[2];
+                    var $checkbox = $(this);
+
+                    /**
+                     * A request header with the id of the participant and a boolean to check if the participant is weighed in or not
+                     * @type {{participantID: string, action: string}}
+                     */
+                    var requestHeader = {
+                        participantID: "" + id,
+                        bodyWeight: "" + $("#body-weight-" + id).val(),
+                        startingSnatch: "" + $("#starting-snatch-weight-" + id).val(),
+                        startingCJ: "" + $("#starting-clean-and-jerk-weight-" + id).val()
+                    }
+
+                    $.post(isChecked(id), requestHeader, function (data) {
+                        var response = $.parseJSON(data);
+
+                        if (response.code == "200") {
+                            console.log("trying to reload");
+                            location.reload();
+                        } else if (response.code == "400") {
+                            console.log("error message");
+                            $("#error-message").text("" + response.msg);
+                            $checkbox.prop('checked', false);
+
+                        }
+                    });
+                });
+            });
+
+        </script>
+    </div>
+</body>
+</html>

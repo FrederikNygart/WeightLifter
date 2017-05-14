@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org"
+  layout:decorator="layouts/main">
+<head>
+    <title>Weightlifting Management System</title>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card card-block">
+        <div
+             th:include="fragments/participant-info :: participant-info"
+             th:with="participant=${currParticipant.get()}"
+        />
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card card-block">
+        <div
+             th:include="fragments/lift-register-form :: register-lift"
+             th:with="participant=${currParticipant.get()}"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <table class="table table-hover table-competition">
+      <thead>
+        <tr>
+          <th rowspan="2">No.</th>
+          <th rowspan="2">Name</th>
+          <th rowspan="2">Sex</th>
+          <!--<th rowspan="2">DoB</th>-->
+          <th rowspan="2">Club</th>
+          <th rowspan="2">Body<br />Weight</th>
+          <th rowspan="2">Lifting</th>
+          <th class="center-heading" colspan="4">Snatch</th>
+          <th class="center-heading" colspan="4">Clean&amp;Jerk</th>
+          <th rowspan="2">Total</th>
+          <th rowspan="2">Sinclair</th>
+          <th rowspan="2">Ranking</th>
+          <th rowspan="2"></th>
+        </tr>
+      <tr>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>Best</th>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>Best</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr th:each="p : ${participants}">
+          <td th:text="${p.id}">Lifter no</td>
+          <td th:text="${p.fullName}">Lifter name</td>
+          <td th:text="${p.genderInitial}">M</td>
+          <!--<td th:text="${p.dateOfBirthString}">Date of birth</td>-->
+          <td th:text="${p.clubName}">AK Jyden</td>
+          <td th:text="${p.bodyWeight} + ' kg'">Bodyweight</td>
+          <td th:text="${p.currentWeight} + ' kg'"></td>
+          <td th:each="l : ${p.snatchLifts}"
+              th:text="${l.isAbstained()}? '-' : ${l.weight}"
+              th:class="${l.outcome.toString().toLowerCase()} + '-lift'" />
+          <td th:if="${p.snatchesRemaining > 0}"
+              th:each="i : ${#numbers.sequence(1, p.snatchesRemaining)}"
+              class="incomplete-lift"></td>
+          <td class="best-lift" th:text="${p.bestSnatch}"></td>
+          <td th:each="l : ${p.cleanAndJerkLifts}"
+              th:text="${l.isAbstained()}? '-' : ${l.weight}"
+              th:class="${l.outcome.toString().toLowerCase()} + '-lift'" />
+          <td th:if="${p.cleanAndJerksRemaining > 0}"
+              th:each="i : ${#numbers.sequence(1, p.cleanAndJerksRemaining)}"
+              class="incomplete-lift"></td>
+          <td class="best-lift" th:text="${p.bestCleanAndJerk}"></td>
+          <td th:text="${p.totalScore}"></td>
+          <td th:text="${#numbers.formatDecimal(p.sinclairScore, 1, 1)}"></td>
+          <td th:text="${p.rank}"></td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 <span class="glyphicon glyphicon-option-vertical"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li th:switch="${p.canChangeWeight()}">
+                  <a th:case="true"
+                     href="#"
+                     data-toggle="modal" data-target="#competition-modal"
+                     class="increase-weight"
+                     th:id="'increase-weight-' + ${p.id}">Increase Weight</a>
+                  <a th:case="false"
+                     href="#"
+                     class="disabled"
+                     data-toggle="tooltip"
+                     data-placement="top"
+                     title="Participant has increased weight twice since previous lift."><s>Increase Weight</s></a>
+                </li>
+                <li><a href="#"
+                       data-toggle="modal" data-target="#competition-modal"
+                       class="correct-weight"
+                       th:id="'correct-weight-' + ${p.id}">Correct Weight</a>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#"
+                       data-toggle="modal" data-target="#competition-modal"
+                       class="correct-lifts"
+                       th:id="'correct-lifts-' + ${p.id}">Correct Lifts</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Lifter Info</a></li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal fade" id="competition-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  </div>
+
+<script>
+  $( document ).ready(function() {
+    $( ".increase-weight, .correct-weight, .correct-lifts" ).click(function(event) {
+      var pathElems = event.target.id.split("-");
+      var path = "/participant/" + pathElems[0] + "-" + pathElems[1] + "/" + pathElems[2];
+       $.get(path, function(data) {
+        $( "#competition-modal" ).html(data);
+      });
+    });
+
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    });
+  });
+</script>
+</div>
+</body>
+</html>

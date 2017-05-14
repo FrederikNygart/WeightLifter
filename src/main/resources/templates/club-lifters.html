@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorator="layouts/main">
+<head>
+    <title>Weightlifting Management System</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row">
+        <h1>Create a new lifter</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <form th:action="@{/club/save}" th:object="${lifter}" method="POST">
+                <div class="form-group">
+                    <label>Select club</label>
+                    <select class="form-control" id="lifter-club">
+                        <option th:each="club : ${clubs}"
+                                th:value="${club.id}"
+                                th:text="${club.name}">AK Jyden</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="name">Firstname:</label>
+                    <input type="text" name="name" id="name" th:field="*{forename}" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Lastname:</label>
+                    <input type="text"  name="lastname" id="lastname" th:field="*{surname}" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="birthday">Date of birth:</label>
+                    <div class="input-group">
+                        <input type="text" name="birthday" id="birthday" th:field="*{dateOfBirth}" placeholder="01-01-2010" class="form-control" />
+                        <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="male">
+                        Male:
+                        <input type="radio" name="gender" id="male" value="MALE" />
+                    </label>
+                    <label for="female">
+                        Female:
+                        <input type="radio" name="gender" id="female" value="FEMALE"  />
+                    </label>
+                </div>
+                <div class="form-group">
+                    <!-- <input type="hidden" name="lifter-status" th:field="*{active}" /> -->
+                    <input type="hidden" name="lifter-club-id" id="lifter-club-id" value="" />
+                </div>
+                <input type="submit" value="Create lifter" class="btn btn-primary" id="lifter-club-submit" />
+            </form>
+        </div>
+        <div class="col-md-8">
+                <form th:action="@{/club/new-lifter}" method="GET">
+                    <div class="form-group">
+                    <label>Select club</label>
+                    <select class="form-control" id="list-clubs">
+                        <option th:each="club : ${clubs}"
+                                th:value="${club.id}"
+                                th:text="${club.name}">AK Jyden</option>
+                    </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="id" id="list-clubs-id" value="" />
+                    </div>
+                    <input type="submit" value="Submit" id="list-clubs-submit" class="btn btn-default pull-right" />
+                </form>
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Gender</th>
+                        <th>Club</th>
+                        <th>Date of Birth</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="lifter : ${lifters}">
+                        <td th:text="${lifter.forename}">Name</td>
+                        <td th:text="${lifter.surname}"></td>
+                        <td th:text="${lifter.Gender}">gender</td>
+                        <td th:text="${lifter.club}">Club</td>
+                        <td th:text="${#calendars.format(lifter.dateOfBirth, 'dd-MM-yyyy')}">01-01-2010</td>
+                        <td><div th:class="${lifter.active}? 'label label-success' : 'label label-danger'"><span th:text="${lifter.active}? 'Active' : 'Inactive'">Active</span></div></td>
+                        <td><a th:href="@{/club/lifter/} + ${lifter.id}"><i class="glyphicon glyphicon-pencil" id="edit-lifter"></i></a> <a th:href="@{/club/remove/} + ${lifter.id}"><i class="glyphicon glyphicon-trash"></i></a></td>
+                        <!-- <td class="date"><a th:href="@{/club/remove/} + ${lifter.id}" class="label label-danger">Delete</a> <span class="label label-primary">Edit</span></td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

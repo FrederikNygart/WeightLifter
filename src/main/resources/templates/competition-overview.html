@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorator="layouts/main">
+<head>
+    <title>Weightlifting Management System</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Competition Overview</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-9">
+            <div th:include="fragments/competition-details :: competition-details"></div>
+        </div>
+        <div class="col-sm-3">
+            <div class="btn-group visible-xs" role="group"
+                     th:include="fragments/competition-navigation-buttons :: competition-navigation-buttons"></div>
+            <div class="btn-group-vertical visible-sm visible-md visible-lg" role="group"
+                     th:include="fragments/competition-navigation-buttons :: competition-navigation-buttons"></div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
